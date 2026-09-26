@@ -1,0 +1,57 @@
+<div class="form-group">
+    <form class="create-stock-container" (ngSubmit)="createStock(stockForm)" #stockForm="ngForm">
+        <div class="stock-name">
+            <input type="text" placeholder="Stock Name" required name="stockName" #stockName="ngModel"
+                [(ngModel)]="stock.name"
+                [class.valid-input]="stockName.valid"
+                [class.invalid-input]="stockName.invalid">
+        </div>
+        <div *ngIf="stockName.errors && stockName.errors['required']">
+            Stock Name is Mandatory
+        </div>
+
+        <div class="stock-code">
+            <input type="text" placeholder="Stock Code" required minlength="2" name="stockCode"
+                #stockCode="ngModel" [(ngModel)]="stock.code"
+                [class.valid-input]="stockCode.pristine"
+                [class.invalid-input]="stockCode.dirty">
+        </div>
+        <div *ngIf="stockCode.dirty && stockCode.invalid">
+            <div *ngIf="stockCode.errors && stockCode.errors['required']">
+                Stock Code is Mandatory
+            </div>
+            <div *ngIf="stockCode.errors && stockCode.errors['minlength']">
+                Stock Code must be at least of length 2
+            </div>
+        </div>
+
+        <div class="stock-price">
+            <input type="number" placeholder="Stock Price" name="stockPrice" required #stockPrice="ngModel"
+                [(ngModel)]="stock.price" (ngModelChange)="setStockPrice($event)"
+                [class.valid-input]="!stockPrice.dirty || !stockPrice.touched"
+                [class.invalid-input]="stockPrice.dirty && stockPrice.touched">
+        </div>
+        <div *ngIf="stockPrice.dirty && stockPrice.invalid">
+            <div *ngIf="stockPrice.errors && stockPrice.errors['required']">
+                Stock Price is Mandatory
+            </div>
+        </div>
+
+        <div class="stock-exchange">
+            <div>
+                <select name="stockExchange" [(ngModel)]="stock.exchange">
+                    <option *ngFor="let exchange of exchanges" [ngValue]="exchange">{{exchange}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="stock-confirm">
+            <input type="checkbox" name="stockConfirm" required [(ngModel)]="confirmed">
+            I confirm that the information provided above is accurate!
+        </div>
+        <button type="submit">Create</button>
+    </form>
+</div>
+
+<h4>Stock Name is {{stock | json}}</h4>
+<h4>Data has been confirmed: {{confirmed}}</h4>

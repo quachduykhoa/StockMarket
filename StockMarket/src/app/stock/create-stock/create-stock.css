@@ -1,0 +1,92 @@
+.form-group {
+    width: 620px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #111;
+}
+
+.create-stock-container {
+    width: 100%;
+    border: 1px solid #2a2a2a;
+    border-radius: 4px;
+    display: block;
+    padding: 18px 18px 14px;
+    background: #f7f7f7;
+    box-sizing: border-box;
+}
+
+.create-stock-container h1 {
+    margin: 0 0 14px;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111;
+}
+
+.create-stock-container input,
+.create-stock-container select {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    padding: 7px 8px;
+    margin-top: 5px;
+    border: 1px solid #bcbcbc;
+    border-radius: 3px;
+    box-sizing: border-box;
+    background: #fff;
+}
+
+.create-stock-container input.invalid-input {
+    background-color: #f5dfe3;
+    border-color: #d66;
+}
+
+.create-stock-container input.valid-input {
+    background-color: #dff3df;
+    border-color: #6aaa6a;
+}
+
+.stock-name,
+.stock-code,
+.stock-price {
+    margin-bottom: 12px;
+}
+
+.stock-exchange {
+    margin: 14px 0;
+}
+
+.stock-exchange input,
+.stock-confirm input {
+    display: inline-block;
+    width: auto;
+    margin: 0 6px 0 0;
+}
+
+.stock-confirm {
+    margin: 16px 0;
+}
+
+.create-stock-container input:focus,
+.create-stock-container select:focus {
+    outline: 2px solid rgba(90, 150, 255, 0.25);
+    border-color: #7aa0ff;
+}
+
+.create-stock-container input.invalid-input:focus {
+    border-color: #d66;
+}
+
+.create-stock-container button {
+    margin-top: 18px;
+    background: #e8e8e8;
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 7px 14px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.buttons button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+

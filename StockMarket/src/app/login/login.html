@@ -1,0 +1,16 @@
+<!--form login-->
+<form class="login-container" (ngSubmit)="login()">
+    <label>Username:</label>
+    <input type="text" name="username" [(ngModel)]="username" placeholder="Enter your username" name="username">
+
+    <label>Password:</label>
+    <input type="password" name="password" [(ngModel)]="password" placeholder="Enter your password" name="password">
+
+    <button type="submit">Login</button>
+</form>
+
+<p class="error-message">{{errorMessage}}</p>
+
+<h4>User Name is {{username | json}}</h4>
+<h4>Password is {{password | json}}</h4>
+

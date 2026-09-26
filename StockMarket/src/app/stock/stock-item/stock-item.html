@@ -1,0 +1,13 @@
+<div class="stock-container">
+    <div class="name"> {{stock.name + ' (' + stock.code + ')'}} </div>
+    
+    <div class="price" 
+        [class]="stock.isPositiveChange() ? 'positive' : 'negative'">$ {{stock.price}} 
+    </div>
+
+    <button type="button" (click)="toggleFavorite($event)"
+        [class.favorite-active]="stock.favorite">
+        {{ stock.favorite ? 'Remove from Favorite' : 'Add to Favorite' }}
+    </button>
+    
+</div>

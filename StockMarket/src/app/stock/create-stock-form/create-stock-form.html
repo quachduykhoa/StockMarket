@@ -1,0 +1,61 @@
+<h2>Create Stock Form</h2>
+
+<div class="form-group">
+  <form [formGroup]="stockForm" (ngSubmit)="onSubmit()">
+
+    <div class="stock-name">
+      <input type="text"
+             placeholder="Stock Name"
+             name="stockName"
+             formControlName="name">
+      <div *ngIf="stockForm.get('name')?.invalid && 
+                                        (stockForm.get('name')?.dirty || 
+                                        stockForm.get('name')?.touched)">
+        <div *ngIf="stockForm.get('name')?.errors?.['required']">
+          Stock Name is required
+        </div>
+      </div>
+    </div>
+
+    <div class="stock-code">
+      <input type="text"
+             placeholder="Stock Code"
+             name="stockCode"
+             formControlName="code">
+      <div *ngIf="stockForm.get('code')?.invalid && 
+                                        (stockForm.get('code')?.dirty || 
+                                        stockForm.get('code')?.touched)">
+        <div *ngIf="stockForm.get('code')?.errors?.['required']">
+          Stock Code is required
+        </div>
+        <div *ngIf="stockForm.get('code')?.errors?.['minlength']">
+          Stock Code must be at least 2 characters
+        </div>
+      </div>
+    </div>
+
+    <div class="stock-price">
+      <input type="number"
+             placeholder="Stock Price"
+             name="stockPrice"
+             formControlName="price">
+      <div *ngIf="stockForm.get('price')?.invalid && 
+                                        (stockForm.get('price')?.dirty || 
+                                        stockForm.get('price')?.touched)">
+        <div *ngIf="stockForm.get('price')?.errors?.['required']">
+          Stock Price is required
+        </div>
+        <div *ngIf="stockForm.get('price')?.errors?.['min']">
+          Stock Price must be at least 0
+        </div>
+      </div>
+    </div>
+
+    <button type="submit">Submit</button>
+
+    <button type="button" (click)="resetForm()">Reset</button>
+    <!--<button type="button" (click)="loadStockFormServer()">Simulate Stock from server </button>
+    <button type="button" (click)="patchStockForm()">Reset Form</button>
+    !-->
+  </form>
+</div>

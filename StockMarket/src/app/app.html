@@ -1,0 +1,8 @@
+@if (router.url === '/stock-item') {
+<h1>Stock Market</h1>
+<app-stock-item></app-stock-item>
+<!-- <app-create-stock></app-create-stock> -->
+<app-create-stock-form></app-create-stock-form>
+} @else {
+<router-outlet></router-outlet> //chèn componet theo url
+}
