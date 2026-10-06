@@ -12,7 +12,6 @@ h1 {
   color: #111;
 }
 
-app-stock-item,
-app-create-stock {
+app-stock-list {
   display: block;
 }

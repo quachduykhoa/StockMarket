@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { Login } from './login/login';
-import { StockItem } from './stock/stock-item/stock-item';
+import { StockList } from './stock/stock-list/stock-list';
 import { CreateStock } from './stock/create-stock/create-stock';
 import { CreateStockForm } from './stock/create-stock-form/create-stock-form';
 
@@ -16,7 +16,7 @@ export const routes: Routes = [
     },
     {
         path: 'stock-item',
-        component: StockItem
+        component: StockList
     },
     {
         path: 'create-stock',

@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormControl, Validators , FormBuilder} from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Stock } from '../../model/stock';
 
 @Component({
@@ -15,16 +15,21 @@ export class CreateStockForm {
   // public nameControl = new FormControl();
   
   public stockForm!: FormGroup;
-  private stock!: Stock;
+  public exchanges: string[] = ['NYSE', 'NASDAQ', 'OTHER'];
+  @Output() stockCreated = new EventEmitter<Stock>();
+  
+  private counter = 1;
+  
   constructor(private fb: FormBuilder) {
     this.createForm();
   }
 
   createForm(){
     this.stockForm = this.fb.group({
-      name: [null, Validators.required],
-      code: [null, [Validators.required, Validators.minLength(2)]],
-      price: [0, [Validators.required, Validators.min(0)]]
+        name: ['', Validators.required],
+        code: ['', [Validators.required, Validators.minLength(2)]],
+      price: [0, [Validators.required, Validators.min(0)]],
+      exchange: ['NYSE']
     });
   }
 
@@ -41,26 +46,43 @@ export class CreateStockForm {
 
   //  Reset Form
   resetForm() {
-    this.stockForm.reset();
+    this.stockForm.reset({ name: '', code: '', price: 0, exchange: 'NYSE' });
   }
 
-  // Giả lập load thông tin Stock từ Server và đổ vào Form
   // loadStockFromServer() {
-  //   this.stock = {
-  //     name: 'Test Stock Company',
-  //     code: 'TSC',
-  //     price: 1200,
-  //     favorite: false,          // Bổ sung thêm
-  //     previousPrice: 1000,      // Bổ sung thêm
-  //     isPositiveChange: true
-  //   };
-  //   // Dùng patchValue để cập nhật dữ liệu vào Form
-  //   this.stockForm.patchValue(this.stock);
+  //   this.stock = new Stock('Test ' + this.counter++, 'TST', 20, 10);
+  //   this.stockForm.setValue({
+  //     name: this.stock.name,
+  //     code: this.stock.code,
+  //     price: this.stock.price
+  //   });
   // }
 
+  patchStockForm() {
+    this.stockForm.patchValue({
+      name: `Test ${this.counter++}`,
+      code: 'TST',
+      price: 20,
+      exchange: 'NYSE'
+    });
+  }
+
   onSubmit() {
-    // Lấy dữ liệu từ form gán lại vào đối tượng stock
-    this.stock = Object.assign({}, this.stockForm.value);
-    console.log('Saving stock model:', this.stock);
+    if (this.stockForm.invalid) {
+      this.stockForm.markAllAsTouched();
+      return;
+    }
+
+    const formValue = this.stockForm.getRawValue();
+    const price = Number(formValue.price ?? 0);
+    const stock = new Stock(
+      formValue.name ?? '',
+      formValue.code ?? '',
+      price,
+      price,
+      formValue.exchange ?? undefined
+    );
+    this.stockCreated.emit(stock);
+    this.resetForm();
   }
 }

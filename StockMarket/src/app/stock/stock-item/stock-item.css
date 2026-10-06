@@ -1,46 +1,119 @@
-.stock-container {
-    width: 360px;
-    border: 1px solid #2f2f2f;
-    border-radius: 4px;
-    display: block;
-    padding: 12px 14px;
-    background: #f7f7f7;
-    box-sizing: border-box;
-    margin-bottom: 24px;
+.stock-row {
+	display: grid;
+	grid-template-columns: var(--stock-columns, 2fr 0.9fr 1fr auto);
+	align-items: center;
+	gap: 14px;
+	padding: 11px 14px;
+	border-bottom: 1px solid #e3e8e5;
+	box-sizing: border-box;
 }
 
-.stock-container .name {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #111;
-    margin-bottom: 10px;
+.stock-row:last-child {
+	border-bottom: none;
 }
 
-.stock-container .price {
-    font-size: 1.05rem;
-    font-weight: 600;
-    margin-bottom: 10px;
+.stock-row:hover {
+	background: #f7faf8;
 }
 
-.stock-container button {
-    border: 1px solid #aaa;
-    background: transparent;
-    color: #1b1b1b;
-    padding: 6px 10px;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 0.9rem;
+.stock-row .name {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	font-size: 1rem;
+	font-weight: 600;
+	color: #182b27;
+	min-width: 0;
 }
 
-.stock-container button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+.stock-row .name .code {
+	padding: 2px 7px;
+	border-radius: 3px;
+	background: #eef2f0;
+	color: #567264;
+	font-size: 0.78rem;
+	font-weight: 700;
+	letter-spacing: 0.04em;
 }
 
-.positive {
-    color: #2ca02c;
+.stock-row .exchange {
+	color: #52615b;
+	font-size: 0.9rem;
 }
 
-.negative {
-    color: #d92d2d;
+.stock-row .price {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	font-weight: 600;
+}
+
+.stock-row .price .change {
+	font-size: 0.82rem;
+	font-weight: 600;
+}
+
+.stock-row .positive,
+.stock-row .positive .change {
+	color: #2ca02c;
+}
+
+.stock-row .negative,
+.stock-row .negative .change {
+	color: #d92d2d;
+}
+
+.stock-row .actions {
+	display: flex;
+	gap: 6px;
+	justify-content: flex-end;
+}
+
+.stock-row button {
+	border: 1px solid #c3ccc7;
+	background: #fff;
+	color: #1b1b1b;
+	padding: 5px 10px;
+	border-radius: 3px;
+	cursor: pointer;
+	font-size: 0.85rem;
+	white-space: nowrap;
+}
+
+.stock-row button:hover {
+	border-color: #8fa39a;
+	background: #f4f7f5;
+}
+
+.stock-row .btn-favorite {
+	padding: 5px 8px;
+	font-size: 0.95rem;
+	line-height: 1;
+}
+
+.stock-row button.favorite-active {
+	border-color: #217a57;
+	background: #e3f2e9;
+	color: #155c40;
+}
+
+.stock-row .btn-delete {
+	border-color: #e4b6b6;
+	color: #a12626;
+}
+
+.stock-row .btn-delete:hover {
+	background: #fdecec;
+	border-color: #d92d2d;
+}
+
+@media (max-width: 640px) {
+	.stock-row {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 8px;
+	}
+
+	.stock-row .actions {
+		justify-content: flex-start;
+	}
 }

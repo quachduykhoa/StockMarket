@@ -1,0 +1,49 @@
+<dialog #dialogRef class="stock-dialog" (close)="close.emit()">
+	<form class="dialog-form" (ngSubmit)="saveChanges()">
+		<header class="dialog-header">
+			<div>
+				<p class="dialog-eyebrow">Update stock</p>
+				<h2>
+					{{ stockValue.name }}
+					<span class="code">{{ stockValue.code }}</span>
+				</h2>
+			</div>
+			<button type="button" class="btn-close" (click)="cancel()" aria-label="Close">×</button>
+		</header>
+
+		<div class="form-body">
+			<label class="field">
+				<span>Stock name</span>
+				<input type="text" name="name" [(ngModel)]="name" placeholder="Stock name" />
+			</label>
+
+			<label class="field">
+				<span>Stock code</span>
+				<input type="text" [value]="stockValue.code" disabled />
+			</label>
+
+			<label class="field">
+				<span>Stock price</span>
+				<input type="number" name="price" [(ngModel)]="price" min="1" />
+			</label>
+
+			<label class="field">
+				<span>Exchange</span>
+				<select name="exchange" [(ngModel)]="exchange">
+					@for (item of exchanges; track item) {
+						<option [value]="item">{{ item }}</option>
+					}
+				</select>
+			</label>
+
+			@if (errorMessage) {
+				<p class="field-error">{{ errorMessage }}</p>
+			}
+		</div>
+
+		<footer class="dialog-footer">
+			<button type="button" class="btn-secondary" (click)="cancel()">Cancel</button>
+			<button type="submit" class="btn-primary">Save</button>
+		</footer>
+	</form>
+</dialog>

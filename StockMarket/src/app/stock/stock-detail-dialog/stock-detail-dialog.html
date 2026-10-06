@@ -1,0 +1,41 @@
+<dialog #dialogRef class="stock-dialog" (close)="close.emit()">
+	<header class="dialog-header">
+		<div>
+			<p class="dialog-eyebrow">Stock detail</p>
+			<h2>
+				{{ stock.name }}
+				<span class="code">{{ stock.code }}</span>
+			</h2>
+		</div>
+		<button type="button" class="btn-close" (click)="closeDialog()" aria-label="Close">×</button>
+	</header>
+
+	<dl class="detail-grid">
+		<div>
+			<dt>Exchange</dt>
+			<dd>{{ stock.exchange || 'OTHER' }}</dd>
+		</div>
+		<div>
+			<dt>Current price</dt>
+			<dd>$ {{ stock.price }}</dd>
+		</div>
+		<div>
+			<dt>Previous price</dt>
+			<dd>$ {{ stock.previousPrice }}</dd>
+		</div>
+		<div>
+			<dt>Change</dt>
+			<dd [class.positive]="stock.isPositiveChange()" [class.negative]="!stock.isPositiveChange()">
+				{{ changePercent }}%
+			</dd>
+		</div>
+		<div>
+			<dt>Favorite</dt>
+			<dd>{{ stock.favorite ? 'Yes' : 'No' }}</dd>
+		</div>
+	</dl>
+
+	<footer class="dialog-footer">
+		<button type="button" class="btn-primary" (click)="closeDialog()">Close</button>
+	</footer>
+</dialog>
