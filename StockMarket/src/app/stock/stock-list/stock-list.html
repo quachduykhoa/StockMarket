@@ -1,30 +1,20 @@
 <main class="market">
-	@let stocks = stocks$ | async;
-
 	<header class="market-heading">
 		<div>
 			<p class="eyebrow">Market overview</p>
 			<h1>Stock Market App</h1>
 		</div>
-		<p class="stock-count">{{ stocks?.length ?? 0 }} stocks</p>
+		<p class="stock-count">{{ filteredStocks.length }} stocks</p>
 	</header>
 
 	<div class="toolbar">
 		<input
-			type="search"
-			class="search-input"
-			placeholder="Search by name, code or exchange"
+			type="text"
+			class="search-box"
+			placeholder="Search by name, code or exchange..."
 			[(ngModel)]="searchTerm"
-			(ngModelChange)="onSearch()"
-			(keyup.escape)="clearSearch()" />
-		@if (searchTerm) {
-			<button type="button" class="btn-clear" (click)="clearSearch()">Clear</button>
-		}
+		/>
 	</div>
-
-	@if (errorMessage) {
-		<p class="error-message">{{ errorMessage }}</p>
-	}
 
 	<section class="listview">
 		<div class="list-header">
@@ -35,33 +25,39 @@
 		</div>
 
 		<ul class="stock-list">
-			@for (stock of stocks ?? []; track stock.code) {
+			@for (stock of filteredStocks; track stock.code) {
 				<li>
 					<app-stock-item
-						[stock]="stock"
-						(favoriteChange)="toggleFavorite(stock, $event)"
-						(detail)="showDetail(stock)"
-						(update)="showUpdate(stock)"
-						(remove)="deleteStock(stock)" />
+						[stock]="stock" 
+						(favoriteChange)="toggleFavorite(stock)"
+						(detail)="openDetail(stock)"
+						(update)="openUpdate(stock)"
+						(remove)="deleteStock(stock)"
+					/>
 				</li>
-			} @empty {
-				<li class="empty-state">No stock matches your search.</li>
 			}
 		</ul>
+
+		@if (filteredStocks.length === 0) {
+			<p class="empty-state">No stock matches "{{ searchTerm }}"</p>
+		}
 	</section>
 
 	<section class="create-section">
-		<app-create-stock-form (stockCreated)="addStock($event)" />
+		<app-create-stock-form />
 	</section>
+
+	@if (selectedStock) {
+		<app-stock-detail-dialog
+			[stock]="selectedStock"
+			(closed)="selectedStock = null"
+		/>
+	}
+
+	@if (stockToUpdate) {
+		<app-stock-update-dialog
+			[stock]="stockToUpdate"
+			(closed)="stockToUpdate = null"
+		/>
+	}
 </main>
-
-@if (detailTarget; as stock) {
-	<app-stock-detail-dialog [stock]="stock" (close)="detailTarget = null" />
-}
-
-@if (updateTarget; as stock) {
-	<app-stock-update-dialog
-		[stock]="stock"
-		(close)="updateTarget = null"
-		(save)="saveUpdate($event)" />
-}

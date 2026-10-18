@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Stock } from '../../model/stock';
+import { StockService } from '../../services/stock.service';
 
 @Component({
   selector: 'app-create-stock-form',
@@ -13,14 +14,17 @@ import { Stock } from '../../model/stock';
 })
 export class CreateStockForm {
   // public nameControl = new FormControl();
-  
+
   public stockForm!: FormGroup;
   public exchanges: string[] = ['NYSE', 'NASDAQ', 'OTHER'];
-  @Output() stockCreated = new EventEmitter<Stock>();
-  
+
+  //thông báo hiển thị trên form
+  public message = '';
+  public messageType: 'success' | 'error' = 'success';
+
   private counter = 1;
-  
-  constructor(private fb: FormBuilder) {
+
+  constructor(private fb: FormBuilder, private stockService: StockService) {
     this.createForm();
   }
 
@@ -41,7 +45,7 @@ export class CreateStockForm {
 
   // Getters giúp lấy nhanh control ngoài file HTML
   get name() { return this.stockForm.get('name'); }
-  get code() { return this.stockForm.get('code'); } 
+  get code() { return this.stockForm.get('code'); }
   get price() { return this.stockForm.get('price'); }
 
   //  Reset Form
@@ -82,7 +86,17 @@ export class CreateStockForm {
       price,
       formValue.exchange ?? undefined
     );
-    this.stockCreated.emit(stock);
-    this.resetForm();
+
+    this.stockService.createStock(stock).subscribe({
+      next: (created) => {
+        this.messageType = 'success';
+        this.message = 'Successfully created stock with stock code: ' + created.code;
+        this.resetForm();
+      },
+      error: (err: Error) => {
+        this.messageType = 'error';
+        this.message = err.message;
+      },
+    });
   }
 }

@@ -1,49 +1,63 @@
-<dialog #dialogRef class="stock-dialog" (close)="close.emit()">
-	<form class="dialog-form" (ngSubmit)="saveChanges()">
-		<header class="dialog-header">
-			<div>
-				<p class="dialog-eyebrow">Update stock</p>
-				<h2>
-					{{ stockValue.name }}
-					<span class="code">{{ stockValue.code }}</span>
-				</h2>
-			</div>
-			<button type="button" class="btn-close" (click)="cancel()" aria-label="Close">×</button>
-		</header>
+<dialog #dialog class="update-dialog" (close)="closed.emit()">
+	@if (stock) {
+		<div class="dialog-header">
+			<h3>
+				Update Stock
+				<span class="code">{{ stock.code }}</span>
+			</h3>
+			<button type="button" class="close-btn" (click)="close()" title="Close">×</button>
+		</div>
 
-		<div class="form-body">
+		@if (message) {
+			<p class="message" [class.error]="messageType === 'error'">{{ message }}</p>
+		}
+
+		<form class="dialog-body" [formGroup]="stockForm" (ngSubmit)="save()">
 			<label class="field">
-				<span>Stock name</span>
-				<input type="text" name="name" [(ngModel)]="name" placeholder="Stock name" />
+				<span>Stock Name *</span>
+				<input 
+					type="text"
+					formControlName="name"
+					placeholder="Stock Name"
+					[class.invalid]="isInvalid('name')"
+				/>
 			</label>
 
 			<label class="field">
-				<span>Stock code</span>
-				<input type="text" [value]="stockValue.code" disabled />
+				<span>Price *</span>
+				<input
+					type="number"
+					formControlName="price"
+					placeholder="Price"
+					[class.invalid]="isInvalid('price')"
+				/>
 			</label>
 
 			<label class="field">
-				<span>Stock price</span>
-				<input type="number" name="price" [(ngModel)]="price" min="1" />
+				<span>Previous Price *</span>
+				<input
+					type="number"
+					formControlName="previousPrice"
+					placeholder="Previous Price"
+					[class.invalid]="isInvalid('previousPrice')"
+				/>
 			</label>
 
 			<label class="field">
-				<span>Exchange</span>
-				<select name="exchange" [(ngModel)]="exchange">
-					@for (item of exchanges; track item) {
-						<option [value]="item">{{ item }}</option>
-					}
+				<span>Exchange *</span>
+				<select formControlName="exchange" [class.invalid]="isInvalid('exchange')">
+					<option value="NYSE">NYSE</option>
+					<option value="NASDAQ">NASDAQ</option>
+					<option value="OTHER">OTHER</option>
 				</select>
 			</label>
 
-			@if (errorMessage) {
-				<p class="field-error">{{ errorMessage }}</p>
-			}
-		</div>
-
-		<footer class="dialog-footer">
-			<button type="button" class="btn-secondary" (click)="cancel()">Cancel</button>
-			<button type="submit" class="btn-primary">Save</button>
-		</footer>
-	</form>
+			<div class="actions">
+				<button type="button" class="cancel" (click)="close()">Cancel</button>
+				<button type="submit" class="primary" [disabled]="stockForm.invalid">
+					Save
+				</button>
+			</div>
+		</form>
+	}
 </dialog>

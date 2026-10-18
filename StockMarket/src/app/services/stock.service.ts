@@ -1,114 +1,75 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map, of, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { Stock } from '../model/stock';
 
-/**
- * StockService – nơi lưu trữ danh sách cổ phiếu DÙNG CHUNG cho mọi component.
- *
- * - BehaviorSubject là nguồn dữ liệu duy nhất (single source of truth).
- *   Khi danh sách thay đổi, mọi component đang theo dõi sẽ tự nhận bản mới.
- * - Mọi phương thức đọc/ghi đều trả về Observable để component xử lý bất đồng bộ
- *   (subscribe với 2 nhánh: next và error).
- * - Dữ liệu giả lập bất đồng bộ bằng of(), lỗi được báo qua throwError()
- *   (cú pháp RxJS v6+, thay cho Observable.of / Observable.throw).
- */
 @Injectable({
   providedIn: 'root',
 })
 export class StockService {
-  private readonly stocks$ = new BehaviorSubject<Stock[]>([
-    new Stock('Test Stock Company', 'TSC', 85, 80, 'NASDAQ'),
-    new Stock('Second Stock Company', 'SSC', 10, 12, 'NYSE'),
-    new Stock('Last Stock Company', 'LSC', 876, 860, 'NYSE'),
-    new Stock('My New Stock', 'MNS', 244, 220, 'NASDAQ'),
-  ]);
+  private stocks: Stock[];
 
-  // ---------- READ ----------
+  constructor() {
+    this.stocks = [
+      new Stock('Test Stock Company', 'TSC', 85, 80, 'NASDAQ'),
+      new Stock('Second Stock Company', 'SSC', 10, 12, 'NYSE'),
+      new Stock('Last Stock Company', 'LSC', 876, 860, 'NYSE'),
+      new Stock('My New Stock', 'MNS', 244, 220, 'NASDAQ'),
+    ];
+  }
 
-  /** Lấy toàn bộ danh sách. */
+  // lấy dữ liệu : trả về một Observable chứa danh sách Stock
   getStocks(): Observable<Stock[]> {
-    return this.stocks$.asObservable();
-  }
+    return of(this.stocks);
+  }  //subscribe() sẽ nhận được danh sách Stock từ Observable này
 
-  /** Tìm kiếm theo tên, mã hoặc sàn giao dịch – luôn bám theo danh sách mới nhất. */
-  searchStocks(keyword: string): Observable<Stock[]> {
-    const key = keyword.trim().toLowerCase();
-
-    return this.stocks$.pipe(
-      map((stocks) =>
-        key === ''
-          ? stocks
-          : stocks.filter(
-              (stock) =>
-                stock.name.toLowerCase().includes(key) ||
-                stock.code.toLowerCase().includes(key) ||
-                (stock.exchange ?? '').toLowerCase().includes(key),
-            ),
-      ),
-    );
-  }
-
-  /** Lấy chi tiết một cổ phiếu theo mã. */
-  getStock(code: string): Observable<Stock> {
-    const stock = this.findByCode(code);
-
-    return stock
-      ? of(stock)
-      : throwError(() => new Error(`Không tìm thấy mã cổ phiếu "${code}"`));
-  }
-
-  // ---------- CREATE ----------
-
-  addStock(stock: Stock): Observable<Stock> {
-    if (this.findByCode(stock.code)) {
+  createStock(stock: Stock): Observable<Stock> {
+    const foundStock = this.stocks.find((each) => each.code === stock.code);
+    if (foundStock) {
       return throwError(
-        () => new Error(`Mã cổ phiếu "${stock.code}" đã tồn tại`),
+        () => new Error('Stock with code ' + stock.code + ' already exists'),
       );
     }
 
-    this.stocks$.next([...this.stocks$.value, stock]);
+    this.stocks.push(stock);
     return of(stock);
   }
 
-  // ---------- UPDATE ----------
-
-  /** Cập nhật theo mã cổ phiếu (mã là khóa, không cho đổi khi sửa). */
-  updateStock(stock: Stock): Observable<Stock> {
-    const stocks = this.stocks$.value;
-    const index = stocks.findIndex((item) => item.code === stock.code);
-
-    if (index === -1) {
+  toggleFavorite(stock: Stock): Observable<Stock> {
+    const foundStock = this.stocks.find((each) => each.code === stock.code);
+    if (!foundStock) {
       return throwError(
-        () => new Error(`Không tìm thấy mã cổ phiếu "${stock.code}"`),
+        () => new Error('Stock with code ' + stock.code + ' was not found'),
       );
     }
 
-    const updated = [...stocks];
-    updated[index] = stock;
-    this.stocks$.next(updated);
-
-    return of(stock);
+    foundStock.favorite = !foundStock.favorite;
+    return of(foundStock);
   }
-
-  // ---------- DELETE ----------
 
   deleteStock(code: string): Observable<Stock> {
-    const stock = this.findByCode(code);
-
-    if (!stock) {
+    const foundIndex = this.stocks.findIndex((each) => each.code === code);
+    if (foundIndex === -1) {
       return throwError(
-        () => new Error(`Không tìm thấy mã cổ phiếu "${code}"`),
+        () => new Error('Stock with code ' + code + ' was not found'),
       );
     }
 
-    this.stocks$.next(
-      this.stocks$.value.filter((item) => item.code !== code),
-    );
-
-    return of(stock);
+    const [removed] = this.stocks.splice(foundIndex, 1); //xóa 1 phần tử khỏi mảng
+    return of(removed);
   }
 
-  private findByCode(code: string): Stock | undefined {
-    return this.stocks$.value.find((stock) => stock.code === code);
+    updateStock(stock: Stock): Observable<Stock> {
+    const foundStock = this.stocks.find((each) => each.code === stock.code);
+    if (!foundStock) {
+      return throwError(
+        () => new Error('Stock with code ' + stock.code + ' was not found'),
+      );
+    }
+
+    foundStock.name = stock.name;
+    foundStock.price = stock.price;
+    foundStock.previousPrice = stock.previousPrice;
+    foundStock.exchange = stock.exchange;
+    return of(foundStock);
   }
 }

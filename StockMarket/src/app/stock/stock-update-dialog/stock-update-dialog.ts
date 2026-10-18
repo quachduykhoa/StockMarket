@@ -4,97 +4,99 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  PLATFORM_ID,
+  OnChanges,
   Output,
+  SimpleChanges,
   ViewChild,
-  inject,
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Stock } from '../../model/stock';
+import { StockService } from '../../services/stock.service';
 
-/** Hộp thoại cập nhật thông tin một cổ phiếu. */
 @Component({
   selector: 'app-stock-update-dialog',
-  imports: [FormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './stock-update-dialog.html',
   styleUrl: './stock-update-dialog.css',
 })
-export class StockUpdateDialog implements AfterViewInit {
-  @Output() close = new EventEmitter<void>();
-  @Output() save = new EventEmitter<Stock>();
+export class StockUpdateDialog implements AfterViewInit, OnChanges {
+  @Input() stock: Stock | null = null; //cổ phiếu cần cập nhật
+  @Output() closed = new EventEmitter<void>(); //báo cha: mình đã đóng
 
-  @ViewChild('dialogRef') private dialogRef?: ElementRef<HTMLDialogElement>;
+  @ViewChild('dialog') dialog?: ElementRef<HTMLDialogElement>;
 
-  private readonly platformId = inject(PLATFORM_ID);
+  public stockForm: FormGroup;
+  public message = '';
+  public messageType: 'success' | 'error' = 'success';
 
-  stockValue!: Stock;
-  exchanges = ['NYSE', 'NASDAQ', 'OTHER'];
+  constructor(private fb: FormBuilder, private stockService: StockService) {
+    this.stockForm = this.fb.group({
+      name: ['', Validators.required],
+      price: [0, [Validators.required, Validators.min(0)]],
+      previousPrice: [0, [Validators.required, Validators.min(0)]],
+      exchange: ['', Validators.required],
+    });
+  }
 
-  name = '';
-  price = 0;
-  exchange = 'NYSE';
-  errorMessage = '';
+  //cha vừa gán input → đổ dữ liệu cũ vào form để sửa
+  ngOnChanges(changes: SimpleChanges) {
+    const stock: Stock | null = changes['stock']
+      ? changes['stock'].currentValue
+      : null;
 
-  @Input({ required: true })
-  set stock(value: Stock) {
-    this.stockValue = value;
-    this.name = value.name;
-    this.price = value.price;
-    this.exchange = value.exchange ?? 'NYSE';
-    this.errorMessage = '';
+    if (stock) {
+      this.stockForm.setValue({
+        name: stock.name,
+        price: stock.price,
+        previousPrice: stock.previousPrice,
+        exchange: stock.exchange ?? 'OTHER',
+      });
+      this.message = '';
+    }
   }
 
   ngAfterViewInit() {
-    const element = this.dialogRef?.nativeElement;
-    if (!element) {
-      return;
-    }
-
-    if (isPlatformBrowser(this.platformId) && element.showModal) {
-      element.showModal();
-    } else {
-      element.setAttribute('open', '');
-    }
+    //view render xong → mở modal
+    this.dialog?.nativeElement.showModal();
   }
 
-  saveChanges() {
-    const name = this.name.trim();
+  isInvalid(controlName: string): boolean {
+    const control = this.stockForm.get(controlName);
+    return !!control && control.touched && control.invalid;
+  }
 
-    if (!name) {
-      this.errorMessage = 'Stock name is required';
+  save() {
+    if (this.stockForm.invalid || !this.stock) {
+      this.stockForm.markAllAsTouched();
+      this.message = 'Please fill in all required fields (price must be >= 0).';
+      this.messageType = 'error';
       return;
     }
 
-    if (!Number.isFinite(this.price) || this.price <= 0) {
-      this.errorMessage = 'Stock price must be greater than 0';
-      return;
-    }
-
-    // Mã cổ phiếu là khóa, không cho đổi. Giá cũ trở thành giá "previous".
+    const value = this.stockForm.getRawValue();
     const updated = new Stock(
-      name,
-      this.stockValue.code,
-      this.price,
-      this.stockValue.price,
-      this.exchange,
+      value.name ?? this.stock.name,
+      this.stock.code, //khóa chính → giữ nguyên
+      Number(value.price ?? 0),
+      Number(value.previousPrice ?? 0),
+      value.exchange ?? 'OTHER',
     );
-    updated.favorite = this.stockValue.favorite;
 
-    this.save.emit(updated);
+    this.stockService.updateStock(updated).subscribe({
+      next: () => this.close(),
+      error: (err: Error) => {
+        this.message = err.message;
+        this.messageType = 'error';
+      },
+    });
   }
 
-  cancel() {
-    this.closeDialog();
-  }
-
-  private closeDialog() {
-    const element = this.dialogRef?.nativeElement;
-
-    if (element?.close) {
-      element.close();
-    } else {
-      this.close.emit();
-    }
+  close() {
+    this.dialog?.nativeElement.close();
   }
 }

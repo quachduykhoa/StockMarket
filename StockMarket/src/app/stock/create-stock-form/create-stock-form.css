@@ -1,4 +1,19 @@
-.form-group {
+.message {
+	margin: 0 0 14px;
+	padding: 10px 12px;
+	border: 1px solid #a9dcbb;
+	border-radius: 5px;
+	background-color: #e9f7ee;
+	color: #176b55;
+	font-size: 0.9rem;
+	line-height: 1.4;
+}
+
+.message.error {
+	border-color: #f0b7b7;
+	background-color: #fdecec;
+	color: #a12626;
+}.form-group {
 	width: min(100%, 560px);
 	color: #1f2933;
 }

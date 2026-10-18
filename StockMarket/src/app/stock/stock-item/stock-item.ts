@@ -10,9 +10,10 @@ import { Stock } from '../../model/stock';
 export class StockItem {
   @Input({ required: true }) stock!: Stock; //đánh dấu cổng đầu vào
   @Output() favoriteChange = new EventEmitter<boolean>();
-  @Output() detail = new EventEmitter<void>(); //xem chi tiết
-  @Output() update = new EventEmitter<void>(); //cập nhật
-  @Output() remove = new EventEmitter<void>(); //xóa
+  @Output() detail = new EventEmitter<void>();
+  @Output() update = new EventEmitter<void>();
+
+  @Output() remove = new EventEmitter<void>();
 
   toggleFavorite() {
     this.favoriteChange.emit(!this.stock.favorite);
@@ -26,21 +27,7 @@ export class StockItem {
     this.update.emit();
   }
 
-  showDelete() {
+  removeStock() {
     this.remove.emit();
-  }
-
-  /** Phần trăm thay đổi giá so với phiên trước: +6.25 / -2.40 */
-  get changePercent(): string {
-    if (!this.stock.previousPrice) {
-      return '0.00';
-    }
-
-    const percent =
-      ((this.stock.price - this.stock.previousPrice) /
-        this.stock.previousPrice) *
-      100;
-
-    return percent.toFixed(2);
   }
 }
