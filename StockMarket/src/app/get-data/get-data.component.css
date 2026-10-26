@@ -1,0 +1,14 @@
+.get-data { 
+    max-width: 900px; 
+    margin: 2rem auto; 
+    padding: 0 1rem; 
+    font-family: system-ui, sans-serif; 
+}
+
+.hint { color: #6b7280; font-size: .85rem; }
+.error { color: #b91c1c; background: #fef2f2; padding: .75rem 1rem; border-radius: 8px; }
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+th, td { text-align: left; padding: .6rem .75rem; border-bottom: 1px solid #e5e7eb; }
+th { background: #f9fafb; font-size: .8rem; text-transform: uppercase; color: #6b7280; }
+.up { color: #15803d; font-weight: 600; }
+.down { color: #b91c1c; font-weight: 600; }

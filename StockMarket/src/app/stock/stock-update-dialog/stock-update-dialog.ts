@@ -9,6 +9,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
+
 import {
   FormBuilder,
   FormGroup,
@@ -25,8 +26,8 @@ import { StockService } from '../../services/stock.service';
   styleUrl: './stock-update-dialog.css',
 })
 export class StockUpdateDialog implements AfterViewInit, OnChanges {
-  @Input() stock: Stock | null = null; //cổ phiếu cần cập nhật
-  @Output() closed = new EventEmitter<void>(); //báo cha: mình đã đóng
+  @Input() stock: Stock | null = null;
+  @Output() closed = new EventEmitter<void>();
 
   @ViewChild('dialog') dialog?: ElementRef<HTMLDialogElement>;
 
@@ -43,7 +44,6 @@ export class StockUpdateDialog implements AfterViewInit, OnChanges {
     });
   }
 
-  //cha vừa gán input → đổ dữ liệu cũ vào form để sửa
   ngOnChanges(changes: SimpleChanges) {
     const stock: Stock | null = changes['stock']
       ? changes['stock'].currentValue
@@ -61,7 +61,6 @@ export class StockUpdateDialog implements AfterViewInit, OnChanges {
   }
 
   ngAfterViewInit() {
-    //view render xong → mở modal
     this.dialog?.nativeElement.showModal();
   }
 
@@ -79,16 +78,21 @@ export class StockUpdateDialog implements AfterViewInit, OnChanges {
     }
 
     const value = this.stockForm.getRawValue();
-    const updated = new Stock(
-      value.name ?? this.stock.name,
-      this.stock.code, //khóa chính → giữ nguyên
-      Number(value.price ?? 0),
-      Number(value.previousPrice ?? 0),
-      value.exchange ?? 'OTHER',
-    );
+    const updated: Stock = {
+      id: this.stock.id,
+      name: value.name ?? this.stock.name,
+      code: this.stock.code,
+      price: Number(value.price ?? 0),
+      previousPrice: Number(value.previousPrice ?? 0),
+      exchange: value.exchange ?? 'OTHER',
+      favorite: this.stock.favorite,
+    };
 
-    this.stockService.updateStock(updated).subscribe({
-      next: () => this.close(),
+    this.stockService.updateStock(this.stock.id!, updated).subscribe({
+      next: (saved) => {
+        Object.assign(this.stock!, saved);
+        this.close();
+      },
       error: (err: Error) => {
         this.message = err.message;
         this.messageType = 'error';

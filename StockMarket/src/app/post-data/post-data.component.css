@@ -1,0 +1,11 @@
+.post-data { max-width: 560px; margin: 2rem auto; padding: 0 1rem; font-family: system-ui, sans-serif; }
+.hint { color: #6b7280; font-size: .85rem; }
+form { display: grid; gap: .9rem; margin-top: 1rem; }
+label { display: grid; gap: .3rem; font-size: .85rem; color: #374151; }
+label.checkbox { display: flex; align-items: center; gap: .5rem; }
+input, select { padding: .55rem .7rem; border: 1px solid #d1d5db; border-radius: 8px; font-size: .95rem; }
+button { padding: .7rem; border: 0; border-radius: 8px; background: #2563eb; color: #fff; font-weight: 600; cursor: pointer; }
+button:disabled { background: #9ca3af; cursor: not-allowed; }
+.result { margin-top: 1rem; padding: .75rem 1rem; border-radius: 8px; }
+.result.ok { background: #f0fdf4; color: #15803d; }
+.result.bad { background: #fef2f2; color: #b91c1c; }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Stock } from '../../model/stock';
@@ -13,7 +13,8 @@ import { StockService } from '../../services/stock.service';
   styleUrl: './create-stock-form.css',
 })
 export class CreateStockForm {
-  // public nameControl = new FormControl();
+
+  @Output() stockCreated = new EventEmitter<Stock>();
 
   public stockForm!: FormGroup;
   public exchanges: string[] = ['NYSE', 'NASDAQ', 'OTHER'];
@@ -79,19 +80,21 @@ export class CreateStockForm {
 
     const formValue = this.stockForm.getRawValue();
     const price = Number(formValue.price ?? 0);
-    const stock = new Stock(
-      formValue.name ?? '',
-      formValue.code ?? '',
+    const stock: Stock = {
+      name: formValue.name ?? '',
+      code: formValue.code ?? '',
       price,
-      price,
-      formValue.exchange ?? undefined
-    );
+      previousPrice: price,
+      exchange: formValue.exchange ?? 'OTHER',
+      favorite: false,
+    };
 
     this.stockService.createStock(stock).subscribe({
       next: (created) => {
         this.messageType = 'success';
         this.message = 'Successfully created stock with stock code: ' + created.code;
         this.resetForm();
+        this.stockCreated.emit(created);         
       },
       error: (err: Error) => {
         this.messageType = 'error';

@@ -1,0 +1,44 @@
+<main class="get-data">
+  <h1>Get Data from API</h1>
+  <p class="hint">GET http://localhost:3000/stocks</p>
+
+  @if (loading) {
+    <p>Đang tải...</p>
+  }
+
+  @if (errorMessage) {
+    <p class="error">{{ errorMessage }}</p>
+  }
+
+  <table>
+    <thead>
+      <tr>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Change</th>
+        <th>Exchange</th>
+        <th>ID (từ server)</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (stock of stocks$ | async; track stock.code) {
+        <tr>
+          <td>{{ stock.code }}</td>
+          <td>{{ stock.name }}</td>
+          <td>{{ stock.price }}</td>
+          <td
+            [class.up]="stock.price >= stock.previousPrice"
+            [class.down]="stock.price < stock.previousPrice"
+          >
+            {{ stock.price >= stock.previousPrice ? '+' : '' }}{{ stock.price - stock.previousPrice }}
+          </td>
+          <td>{{ stock.exchange }}</td>
+          <td>{{ stock.id }}</td>
+        </tr>
+      } @empty {
+        <tr><td colspan="6">Không có dữ liệu</td></tr>
+      }
+    </tbody>
+  </table>
+</main>

@@ -10,7 +10,14 @@ import { Stock } from '../../model/stock';
   styleUrl: './create-stock.css',
 })
 export class CreateStock {
-  public stock: Stock = new Stock('', '', 0, 0);
+  public stock: Stock = {
+    name: '',
+    code: '',
+    price: 0,
+    previousPrice: 0,
+    exchange: '',
+    favorite: false,
+  };
   public confirmed: boolean = false;
   public exchanges: string[] = ['NYSE', 'NASDAQ', 'OTHER'];
 

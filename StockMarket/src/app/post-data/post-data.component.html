@@ -1,0 +1,48 @@
+<main class="post-data">
+  <h1>Post Data to API</h1>
+  <p class="hint">POST http://localhost:3000/stocks</p>
+
+  <form #stockForm="ngForm" (ngSubmit)="submitStock()">
+    <label>
+      Name
+      <input name="name" [(ngModel)]="stock.name" placeholder="Apple Inc." required />
+    </label>
+
+    <label>
+      Code
+      <input name="code" [(ngModel)]="stock.code" placeholder="AAPL" required />
+    </label>
+
+    <label>
+      Price
+      <input name="price" type="number" [(ngModel)]="stock.price" />
+    </label>
+
+    <label>
+      Previous price
+      <input name="previousPrice" type="number" [(ngModel)]="stock.previousPrice" />
+    </label>
+
+    <label>
+      Exchange
+      <select name="exchange" [(ngModel)]="stock.exchange">
+        <option>NASDAQ</option>
+        <option>NYSE</option>
+        <option>HOSE</option>
+      </select>
+    </label>
+
+    <label class="checkbox">
+      <input name="favorite" type="checkbox" [(ngModel)]="stock.favorite" />
+      Favorite
+    </label>
+
+    <button type="submit" [disabled]="stockForm.invalid || saving">
+      {{ saving ? 'Đang gửi...' : 'POST /stocks' }}
+    </button>
+  </form>
+
+  @if (message) {
+    <p class="result" [class.ok]="success" [class.bad]="!success">{{ message }}</p>
+  }
+</main>

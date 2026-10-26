@@ -14,12 +14,12 @@ import { StockUpdateDialog } from '../stock-update-dialog/stock-update-dialog';
   styleUrl: './stock-list.css',
 })
 
-//component cha: nhận dữ liệu từ StockService
+
 export class StockList implements OnInit {
   stocks: Stock[] = [];
   searchTerm = '';
   selectedStock: Stock | null = null;
-  stockToUpdate: Stock | null = null; //cổ phiếu đang mở trong dialog Update
+  stockToUpdate: Stock | null = null; 
 
   constructor(private stockService: StockService) {}
 
@@ -28,12 +28,28 @@ export class StockList implements OnInit {
       next: (stocks) => (this.stocks = stocks),
       error: (err: Error) => console.log(err.message),
     });
+
+    this.stockService.getStocksAsResponse().subscribe((response) => {
+      console.log('OBSERVE "response" RESPONSE is ', response);
+    });
+
+    this.stockService.getStocksAsEvents().subscribe((response) => {
+      console.log('OBSERVE "events" RESPONSE is ', response);
+    });
+
+    this.stockService.getStocksAsString().subscribe((response) => {
+      console.log('Response Type "text" RESPONSE is ', response);
+    });
+
+    this.stockService.getStocksAsBlob().subscribe((response) => {
+      console.log('Response Type "blob" RESPONSE is ', response);
+    });
   }
 
-  //danh sách hiển thị: đã lọc theo ô tìm kiếm
+
   get filteredStocks(): Stock[] {
     const term = this.searchTerm.trim().toLowerCase();
-    if (!term) { //chưa nhập gì hết
+    if (!term) { 
       return this.stocks;
     }
 
@@ -45,12 +61,6 @@ export class StockList implements OnInit {
     );
   }
 
-  toggleFavorite(stock: Stock) {
-    this.stockService.toggleFavorite(stock).subscribe({
-      error: (err: Error) => console.log(err.message),
-    });
-  }
-
   openDetail(stock: Stock) {
     this.selectedStock = stock;
   }
@@ -60,9 +70,15 @@ export class StockList implements OnInit {
   }
 
   deleteStock(stock: Stock) {
-    this.stockService.deleteStock(stock.code).subscribe({
-      next: (removed) => console.log('Removed stock: ' + removed.code),
+    this.stockService.deleteStock(stock.id!).subscribe({
+      next: () => {
+        this.stocks = this.stocks.filter((each) => each.id !== stock.id);
+      },
       error: (err: Error) => console.log(err.message),
     });
+  }
+
+  onStockCreated(created: Stock) {
+    this.stocks = [...this.stocks, created];
   }
 }   

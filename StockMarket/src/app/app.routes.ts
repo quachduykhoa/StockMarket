@@ -3,6 +3,8 @@ import { Login } from './login/login';
 import { StockList } from './stock/stock-list/stock-list';
 import { CreateStock } from './stock/create-stock/create-stock';
 import { CreateStockForm } from './stock/create-stock-form/create-stock-form';
+import { GetDataComponent } from './get-data/get-data.component'; 
+import { PostDataComponent } from './post-data/post-data.component'; 
 
 export const routes: Routes = [
     {
@@ -25,5 +27,13 @@ export const routes: Routes = [
     {
         path: 'create-stock-form',
         component: CreateStockForm
+    },
+    {
+        path: 'get-data',
+        component: GetDataComponent
+    },
+    {
+        path: 'post-data',
+        component: PostDataComponent
     }
 ];

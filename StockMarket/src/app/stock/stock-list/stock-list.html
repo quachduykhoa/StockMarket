@@ -29,7 +29,6 @@
 				<li>
 					<app-stock-item
 						[stock]="stock" 
-						(favoriteChange)="toggleFavorite(stock)"
 						(detail)="openDetail(stock)"
 						(update)="openUpdate(stock)"
 						(remove)="deleteStock(stock)"
@@ -44,7 +43,7 @@
 	</section>
 
 	<section class="create-section">
-		<app-create-stock-form />
+		<app-create-stock-form (stockCreated)="onStockCreated($event)" />
 	</section>
 
 	@if (selectedStock) {

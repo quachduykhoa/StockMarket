@@ -1,75 +1,49 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { HttpResponse, HttpEvent } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Stock } from '../model/stock';
+import { HttpService } from './http-service';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class StockService {
-  private stocks: Stock[];
+  constructor(private http: HttpService) {}
 
-  constructor() {
-    this.stocks = [
-      new Stock('Test Stock Company', 'TSC', 85, 80, 'NASDAQ'),
-      new Stock('Second Stock Company', 'SSC', 10, 12, 'NYSE'),
-      new Stock('Last Stock Company', 'LSC', 876, 860, 'NYSE'),
-      new Stock('My New Stock', 'MNS', 244, 220, 'NASDAQ'),
-    ];
+  getStocks(): Observable<Stock[]> {
+    return this.http.getStocks();
   }
 
-  // lấy dữ liệu : trả về một Observable chứa danh sách Stock
-  getStocks(): Observable<Stock[]> {
-    return of(this.stocks);
-  }  //subscribe() sẽ nhận được danh sách Stock từ Observable này
-
   createStock(stock: Stock): Observable<Stock> {
-    const foundStock = this.stocks.find((each) => each.code === stock.code);
-    if (foundStock) {
-      return throwError(
-        () => new Error('Stock with code ' + stock.code + ' already exists'),
-      );
-    }
+    return this.http.postStock(stock);
+  }
 
-    this.stocks.push(stock);
-    return of(stock);
+  updateStock(id: string, stock: Stock): Observable<Stock> {
+    return this.http.putStock(id, stock);
+  }
+
+  deleteStock(id: string): Observable<Stock> {
+    return this.http.deleteStock(id);
   }
 
   toggleFavorite(stock: Stock): Observable<Stock> {
-    const foundStock = this.stocks.find((each) => each.code === stock.code);
-    if (!foundStock) {
-      return throwError(
-        () => new Error('Stock with code ' + stock.code + ' was not found'),
-      );
-    }
-
-    foundStock.favorite = !foundStock.favorite;
-    return of(foundStock);
+    return this.http.patchStock(stock.id!, { favorite: !stock.favorite });
   }
 
-  deleteStock(code: string): Observable<Stock> {
-    const foundIndex = this.stocks.findIndex((each) => each.code === code);
-    if (foundIndex === -1) {
-      return throwError(
-        () => new Error('Stock with code ' + code + ' was not found'),
-      );
-    }
-
-    const [removed] = this.stocks.splice(foundIndex, 1); //xóa 1 phần tử khỏi mảng
-    return of(removed);
+  getStocksAsResponse(): Observable<HttpResponse<Stock[]>> {
+    return this.http.getStocksAsResponse();
   }
 
-    updateStock(stock: Stock): Observable<Stock> {
-    const foundStock = this.stocks.find((each) => each.code === stock.code);
-    if (!foundStock) {
-      return throwError(
-        () => new Error('Stock with code ' + stock.code + ' was not found'),
-      );
-    }
+  getStocksAsEvents(): Observable<HttpEvent<any>> {
+    return this.http.getStocksAsEvents();
+  }
 
-    foundStock.name = stock.name;
-    foundStock.price = stock.price;
-    foundStock.previousPrice = stock.previousPrice;
-    foundStock.exchange = stock.exchange;
-    return of(foundStock);
+  getStocksAsString(): Observable<string> {
+    return this.http.getStocksAsString();
+  }
+
+  getStocksAsBlob(): Observable<Blob> {
+    return this.http.getStocksAsBlob();
   }
 }

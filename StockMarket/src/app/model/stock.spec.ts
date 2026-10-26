@@ -2,5 +2,15 @@ import { Stock } from './stock';
 
 describe('Stock', () => {
   it('should create an instance', () => {
-    expect(new Stock('Test Stock Company', 'TSC', 85, 80)).toBeTruthy();  });
+    const stock: Stock = {
+      name: 'Test Stock Company',
+      code: 'TSC',
+      price: 85,
+      previousPrice: 80,
+      exchange: 'NASDAQ',
+      favorite: false,
+    };
+    expect(stock).toBeTruthy();
+    expect(stock.code).toBe('TSC');
+  });
 });

@@ -27,8 +27,8 @@
 			</div>
 			<div class="row">
 				<dt>Change</dt>
-				<dd [class.positive]="stock.isPositiveChange()"
-					[class.negative]="!stock.isPositiveChange()">
+				<dd [class.positive]="stock.price >= stock.previousPrice"
+					[class.negative]="stock.price < stock.previousPrice">
 					{{ changePercent() }}%
 				</dd>
 			</div>
