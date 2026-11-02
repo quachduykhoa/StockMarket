@@ -46,10 +46,3 @@
 .login-container button:hover {
   background-color: #0056b3;
 }
-
-.error-message {
-  width: 350px;
-  margin: -80px auto 20px;
-  color: #d92d2d;
-  text-align: center;
-}

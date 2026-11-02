@@ -1,8 +1,5 @@
 <h2>Create Stock Form</h2>
 
-<div *ngIf="message" class="message" [class.error]="messageType === 'error'">{{ message }}</div>
-
-
 <div class="form-group">
   <form [formGroup]="stockForm" (ngSubmit)="onSubmit()">
 

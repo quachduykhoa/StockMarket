@@ -42,10 +42,6 @@
 		}
 	</section>
 
-	<section class="create-section">
-		<app-create-stock-form (stockCreated)="onStockCreated($event)" />
-	</section>
-
 	@if (selectedStock) {
 		<app-stock-detail-dialog
 			[stock]="selectedStock"

@@ -1,4 +1,4 @@
-<div class="stock-container">
+<div class="stock-container" routerLink="/stock/{{ stock.code }}">
 	<div class="name">
 		{{ stock.name }}
 		<span class="code">{{ stock.code }}</span>
@@ -13,21 +13,21 @@
 	</div>
 
 	<div class="actions">
-		<button type="button" (click)="toggleFavorite()"
+		<button type="button" (click)="$event.stopPropagation(); toggleFavorite()"
 			[class.favorite-active]="stock.favorite">
 			{{ stock.favorite ? 'Remove from Favorite' : 'Add to Favorite' }}
 		</button>
-		
-        <button type="button" class="btn-detail" (click)="showDetail()">
+
+        <button type="button" class="btn-detail" (click)="$event.stopPropagation(); showDetail()">
 			Detail
 		</button>
 
-		<button type="button" class="btn-update" (click)="showUpdate()">
+		<button type="button" class="btn-update" (click)="$event.stopPropagation(); showUpdate()">
 			Update
 		</button>
 
-        <button type="button" class="btn-delete" (click)="removeStock()">
+        <button type="button" class="btn-delete" (click)="$event.stopPropagation(); removeStock()">
 			Delete
-		</button>   
+		</button>
 	</div>
 </div>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpEvent, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Stock } from '../model/stock';
+import { User } from '../model/user';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +23,18 @@ export class HttpService {
         .set('X-EXAMPLE-HEADER', 'TestValue'),
       params: { price_gte: '0' },
     });
+  }
+
+  getStocksByCode(code: string): Observable<Stock[]> {
+    return this.httpClient.get<Stock[]>(`${this.REST_API_SERVER}/stocks`, { params: { code } });
+  }
+
+  getUsers(): Observable<User[]> {
+    return this.httpClient.get<User[]>(`${this.REST_API_SERVER}/users`);
+  }
+
+  postUser(body: User): Observable<User> {
+    return this.httpClient.post<User>(`${this.REST_API_SERVER}/users`, body, this.httpOptions);
   }
 
   postStock(body: Stock): Observable<Stock> {

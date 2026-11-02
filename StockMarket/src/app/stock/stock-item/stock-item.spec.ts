@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { Stock } from '../../model/stock';
 
@@ -20,6 +21,7 @@ describe('StockItem', () => {
               of({ ...stock, favorite: !stock.favorite }),
           },
         },
+        provideRouter([]), // stock-item dùng routerLink trên row
       ],
     }).compileComponents();
 

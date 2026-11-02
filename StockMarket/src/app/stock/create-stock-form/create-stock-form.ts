@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Stock } from '../../model/stock';
 import { StockService } from '../../services/stock.service';
+import { MessageService } from '../../services/message.service';
 
 @Component({
   selector: 'app-create-stock-form',
@@ -19,13 +20,13 @@ export class CreateStockForm {
   public stockForm!: FormGroup;
   public exchanges: string[] = ['NYSE', 'NASDAQ', 'OTHER'];
 
-  //thông báo hiển thị trên form
-  public message = '';
-  public messageType: 'success' | 'error' = 'success';
-
   private counter = 1;
 
-  constructor(private fb: FormBuilder, private stockService: StockService) {
+  constructor(
+    private fb: FormBuilder,
+    private stockService: StockService,
+    private messageService: MessageService,
+  ) {
     this.createForm();
   }
 
@@ -91,14 +92,12 @@ export class CreateStockForm {
 
     this.stockService.createStock(stock).subscribe({
       next: (created) => {
-        this.messageType = 'success';
-        this.message = 'Successfully created stock with stock code: ' + created.code;
+        this.messageService.success('Successfully created stock with stock code: ' + created.code);
         this.resetForm();
         this.stockCreated.emit(created);         
       },
       error: (err: Error) => {
-        this.messageType = 'error';
-        this.message = err.message;
+        this.messageService.error(err.message);
       },
     });
   }

@@ -1,0 +1,13 @@
+<!--form đăng ký — kiểu dữ liệu lấy/gửi qua json-server (data.json /users)-->
+<form class="register-container" (ngSubmit)="register()">
+    <label>Username:</label>
+    <input type="text" name="username" [(ngModel)]="username" placeholder="Enter your username">
+
+    <label>Password:</label>
+    <input type="password" name="password" [(ngModel)]="password" placeholder="Enter your password">
+
+    <label>Confirm Password:</label>
+    <input type="password" name="confirmPassword" [(ngModel)]="confirmPassword" placeholder="Re-enter your password">
+
+    <button type="submit">Register</button>
+</form>

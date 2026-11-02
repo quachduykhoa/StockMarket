@@ -18,6 +18,7 @@ import {
 } from '@angular/forms';
 import { Stock } from '../../model/stock';
 import { StockService } from '../../services/stock.service';
+import { MessageService } from '../../services/message.service';
 
 @Component({
   selector: 'app-stock-update-dialog',
@@ -32,10 +33,12 @@ export class StockUpdateDialog implements AfterViewInit, OnChanges {
   @ViewChild('dialog') dialog?: ElementRef<HTMLDialogElement>;
 
   public stockForm: FormGroup;
-  public message = '';
-  public messageType: 'success' | 'error' = 'success';
 
-  constructor(private fb: FormBuilder, private stockService: StockService) {
+  constructor(
+    private fb: FormBuilder,
+    private stockService: StockService,
+    private messageService: MessageService,
+  ) {
     this.stockForm = this.fb.group({
       name: ['', Validators.required],
       price: [0, [Validators.required, Validators.min(0)]],
@@ -56,7 +59,6 @@ export class StockUpdateDialog implements AfterViewInit, OnChanges {
         previousPrice: stock.previousPrice,
         exchange: stock.exchange ?? 'OTHER',
       });
-      this.message = '';
     }
   }
 
@@ -72,8 +74,7 @@ export class StockUpdateDialog implements AfterViewInit, OnChanges {
   save() {
     if (this.stockForm.invalid || !this.stock) {
       this.stockForm.markAllAsTouched();
-      this.message = 'Please fill in all required fields (price must be >= 0).';
-      this.messageType = 'error';
+      this.messageService.error('Please fill in all required fields (price must be >= 0).');
       return;
     }
 
@@ -91,11 +92,11 @@ export class StockUpdateDialog implements AfterViewInit, OnChanges {
     this.stockService.updateStock(this.stock.id!, updated).subscribe({
       next: (saved) => {
         Object.assign(this.stock!, saved);
+        this.messageService.success(`Đã cập nhật mã ${saved.code}`);
         this.close();
       },
       error: (err: Error) => {
-        this.message = err.message;
-        this.messageType = 'error';
+        this.messageService.error(err.message);
       },
     });
   }

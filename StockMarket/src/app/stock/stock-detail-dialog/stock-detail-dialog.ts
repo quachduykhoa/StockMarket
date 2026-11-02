@@ -16,13 +16,12 @@ import { Stock } from '../../model/stock';
   styleUrl: './stock-detail-dialog.css',
 })
 export class StockDetailDialog implements AfterViewInit {
-  @Input() stock: Stock | null = null; //cổ phiếu cần xem chi tiết
-  @Output() closed = new EventEmitter<void>(); //báo cha: mình đã đóng
+  @Input() stock: Stock | null = null; 
+  @Output() closed = new EventEmitter<void>(); 
 
-  @ViewChild('dialog') dialog?: ElementRef<HTMLDialogElement>;//tham chiếu đến thẻ dialog trong template
+  @ViewChild('dialog') dialog?: ElementRef<HTMLDialogElement>;
 
   ngAfterViewInit() {
-    //view đã render xong → mở modal ngay
     this.dialog?.nativeElement.showModal();
   }
 

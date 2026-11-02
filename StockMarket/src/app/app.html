@@ -1,1 +1,17 @@
+<div class="links">
+	<span><a routerLink="/login" routerLinkActive="active">Login</a></span>
+	<span><a routerLink="/register" routerLinkActive="active">Register</a></span>
+	<span><a routerLink="/stock-item" routerLinkActive="active">Stock List</a></span>
+	<span><a routerLink="/create-stock-form" routerLinkActive="active">Create Stock Form</a></span>
+	<span><a routerLink="/get-data" routerLinkActive="active">Get Data</a></span>
+	<span><a routerLink="/post-data" routerLinkActive="active">Post Data</a></span>
+</div>
+
+@if (message$ | async; as message) {
+	<p class="app-message" [class.error]="message.type === 'error'">
+		{{ message.text }}
+		<button type="button" class="dismiss" (click)="clearMessage()">×</button>
+	</p>
+}
+
 <router-outlet></router-outlet>

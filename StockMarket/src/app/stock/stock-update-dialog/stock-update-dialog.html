@@ -8,10 +8,6 @@
 			<button type="button" class="close-btn" (click)="close()" title="Close">×</button>
 		</div>
 
-		@if (message) {
-			<p class="message" [class.error]="messageType === 'error'">{{ message }}</p>
-		}
-
 		<form class="dialog-body" [formGroup]="stockForm" (ngSubmit)="save()">
 			<label class="field">
 				<span>Stock Name *</span>

@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
-import { CreateStockForm } from '../create-stock-form/create-stock-form';
 import { StockList } from './stock-list';
 import { StockService } from '../../services/stock.service';
 import { Stock } from '../../model/stock';
@@ -20,18 +19,12 @@ function createStockServiceMock() {
 
   return {
     getStocks: () => of([...store]),
-    createStock: (stock: Stock) => {
-      stock.id = 'mock-' + (store.length + 1);
-      store.push(stock);
-      return of(stock);
-    },
     updateStock: (id: string, stock: Stock) => of(stock),
     deleteStock: (id: string) => {
       const [removed] = store.splice(store.findIndex((s) => s.id === id), 1);
       return of(removed);
     },
     toggleFavorite: (stock: Stock) => of({ ...stock, favorite: !stock.favorite }),
-    // stub cho demo Advanced HTTP (trang 30) — test không cần HTTP thật
     getStocksAsResponse: () => of(null as any),
     getStocksAsEvents: () => of(null as any),
     getStocksAsString: () => of(null as any),
@@ -48,6 +41,7 @@ describe('StockList', () => {
       imports: [StockList],
       providers: [
         { provide: StockService, useValue: createStockServiceMock() },
+        provideRouter([]), // app-stock-item trong template dùng routerLink
       ],
     }).compileComponents();
 
@@ -60,23 +54,6 @@ describe('StockList', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('adds a valid stock submitted by the form', () => {
-    const form = fixture.debugElement.query(By.directive(CreateStockForm))
-      .componentInstance as CreateStockForm;
-    form.stockForm.setValue({
-      name: 'New Company',
-      code: 'NEW',
-      price: 45,
-      exchange: 'NASDAQ'
-    });
-
-    form.onSubmit();
-    fixture.detectChanges();
-
-    expect(component.stocks).toHaveLength(5);
-    expect(fixture.nativeElement.textContent).toContain('New Company');
   });
 
   it('updates favorite state when the favorite button is clicked', () => {

@@ -1,10 +1,11 @@
 import { Routes } from '@angular/router';
 import { Login } from './login/login';
+import { Register } from './register/register';
 import { StockList } from './stock/stock-list/stock-list';
-import { CreateStock } from './stock/create-stock/create-stock';
 import { CreateStockForm } from './stock/create-stock-form/create-stock-form';
-import { GetDataComponent } from './get-data/get-data.component'; 
-import { PostDataComponent } from './post-data/post-data.component'; 
+import { StockDetailsComponent } from './stock/stock-details/stock-details';
+import { GetDataComponent } from './get-data/get-data.component';
+import { PostDataComponent } from './post-data/post-data.component';
 
 export const routes: Routes = [
     {
@@ -17,12 +18,12 @@ export const routes: Routes = [
         component: Login
     },
     {
-        path: 'stock-item',
-        component: StockList
+        path: 'register',
+        component: Register
     },
     {
-        path: 'create-stock',
-        component: CreateStock
+        path: 'stock-item',
+        component: StockList
     },
     {
         path: 'create-stock-form',
@@ -35,5 +36,13 @@ export const routes: Routes = [
     {
         path: 'post-data',
         component: PostDataComponent
+    },
+    {
+        path: 'stock/:code',
+        component: StockDetailsComponent
+    },
+    {
+        path: '**',
+        redirectTo: 'login'
     }
 ];

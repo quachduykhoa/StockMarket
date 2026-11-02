@@ -10,7 +10,6 @@ describe('StockService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        // StockService không tự làm HTTP — mock HttpService để kiểm chứng ủy quyền
         { provide: HttpService, useValue: { getStocks: () => of([]) } },
       ],
     });

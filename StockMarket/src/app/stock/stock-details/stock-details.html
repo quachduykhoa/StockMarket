@@ -1,0 +1,23 @@
+@if (stock) {
+	<section class="stock-details">
+		<h2 class="name">
+			{{ stock.name }} <span class="code">({{ stock.code }})</span>
+		</h2>
+
+		<p class="exchange">{{ stock.exchange || 'OTHER' }}</p>
+
+		<p
+			class="price"
+			[class.positive]="stock.price >= stock.previousPrice"
+			[class.negative]="stock.price < stock.previousPrice">
+			$ {{ stock.price }}
+			<span class="previous">(previous: $ {{ stock.previousPrice }})</span>
+		</p>
+	</section>
+} @else if (loadFailed) {
+	<p class="error-message">Không tải được chi tiết cổ phiếu — xem thông báo phía trên.</p>
+} @else {
+	<p class="loading">Loading...</p>
+}
+
+<a routerLink="/stock-item"> Quay lại danh sách</a>

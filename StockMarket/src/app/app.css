@@ -15,3 +15,40 @@ h1 {
 app-stock-list {
   display: block;
 }
+
+/* trang 25: style cho nav và link đang active */
+.links,
+.links a {
+  padding: 10px;
+}
+
+.links a.active {
+  background-color: grey;
+}
+
+/* banner thông báo tập trung (MessageService) */
+.app-message {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0;
+  padding: 10px 14px;
+  border-radius: 6px;
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
+.app-message.error {
+  background-color: #f8d7da;
+  color: #842029;
+}
+
+.app-message .dismiss {
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}

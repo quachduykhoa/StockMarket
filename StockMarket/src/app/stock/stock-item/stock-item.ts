@@ -1,27 +1,28 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Stock } from '../../model/stock';
 import { StockService } from '../../services/stock.service';
+import { MessageService } from '../../services/message.service';
 
 @Component({
   selector: 'app-stock-item',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './stock-item.html',
   styleUrl: './stock-item.css',
 })
 export class StockItem {
-  @Input({ required: true }) stock!: Stock; //đánh dấu cổng đầu vào
+  @Input({ required: true }) stock!: Stock; 
   @Output() detail = new EventEmitter<void>();
   @Output() update = new EventEmitter<void>();
 
   @Output() remove = new EventEmitter<void>();
 
-  // trang 12–13: stock-item TỰ gọi service — không bắn favoriteChange lên cha nữa
-  constructor(private stockService: StockService) {}
+  constructor(private stockService: StockService, private messageService: MessageService) {}
 
   toggleFavorite() {
     this.stockService.toggleFavorite(this.stock).subscribe({
       next: (updated) => (this.stock.favorite = updated.favorite),
-      error: (err: Error) => console.log(err.message),
+      error: (err: Error) => this.messageService.error(err.message),
     });
   }
 

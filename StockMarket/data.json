@@ -13,19 +13,22 @@
       "id": "3",
       "name": "Last Stock Company",
       "code": "LSC",
-      "price": 876,
+      "price": 859,
       "previousPrice": 860,
       "exchange": "NYSE",
       "favorite": false
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "username": "khoa",
+      "password": "123456"
     },
     {
-      "id": "OBnHQZyfDmk",
-      "name": "Test 1",
-      "code": "TST",
-      "price": 21,
-      "previousPrice": 21,
-      "exchange": "NYSE",
-      "favorite": false
+      "username": "admin",
+      "password": "admin123",
+      "id": "yWIvXeCJPzY"
     }
   ],
   "profile": {

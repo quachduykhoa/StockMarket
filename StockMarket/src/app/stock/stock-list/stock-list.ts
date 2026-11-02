@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Stock } from '../../model/stock';
 import { StockService } from '../../services/stock.service';
-import { CreateStockForm } from '../create-stock-form/create-stock-form';
+import { MessageService } from '../../services/message.service';
 import { StockItem } from '../stock-item/stock-item';
 import { StockDetailDialog } from '../stock-detail-dialog/stock-detail-dialog';
 import { StockUpdateDialog } from '../stock-update-dialog/stock-update-dialog';
 
 @Component({
   selector: 'app-stock-list',
-  imports: [StockItem, CreateStockForm, FormsModule, StockDetailDialog, StockUpdateDialog],
+  imports: [StockItem, FormsModule, StockDetailDialog, StockUpdateDialog],
   templateUrl: './stock-list.html',
   styleUrl: './stock-list.css',
 })
@@ -19,37 +19,25 @@ export class StockList implements OnInit {
   stocks: Stock[] = [];
   searchTerm = '';
   selectedStock: Stock | null = null;
-  stockToUpdate: Stock | null = null; 
+  stockToUpdate: Stock | null = null;
 
-  constructor(private stockService: StockService) {}
+  constructor(private stockService: StockService, private messageService: MessageService) {}
 
   ngOnInit() {
+    this.loadStocks();
+  }
+
+  private loadStocks() {
     this.stockService.getStocks().subscribe({
       next: (stocks) => (this.stocks = stocks),
-      error: (err: Error) => console.log(err.message),
-    });
-
-    this.stockService.getStocksAsResponse().subscribe((response) => {
-      console.log('OBSERVE "response" RESPONSE is ', response);
-    });
-
-    this.stockService.getStocksAsEvents().subscribe((response) => {
-      console.log('OBSERVE "events" RESPONSE is ', response);
-    });
-
-    this.stockService.getStocksAsString().subscribe((response) => {
-      console.log('Response Type "text" RESPONSE is ', response);
-    });
-
-    this.stockService.getStocksAsBlob().subscribe((response) => {
-      console.log('Response Type "blob" RESPONSE is ', response);
+      error: (err: Error) => this.messageService.error(err.message),
     });
   }
 
 
   get filteredStocks(): Stock[] {
     const term = this.searchTerm.trim().toLowerCase();
-    if (!term) { 
+    if (!term) {
       return this.stocks;
     }
 
@@ -74,11 +62,7 @@ export class StockList implements OnInit {
       next: () => {
         this.stocks = this.stocks.filter((each) => each.id !== stock.id);
       },
-      error: (err: Error) => console.log(err.message),
+      error: (err: Error) => this.messageService.error(err.message),
     });
   }
-
-  onStockCreated(created: Stock) {
-    this.stocks = [...this.stocks, created];
-  }
-}   
+}

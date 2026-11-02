@@ -101,12 +101,6 @@ h1 {
 	padding: 0;
 }
 
-.create-section {
-	margin-top: 28px;
-	padding-top: 24px;
-	border-top: 1px solid #d8e1dc;
-}
-
 @media (max-width: 640px) {
 	.market-heading {
 		align-items: start;

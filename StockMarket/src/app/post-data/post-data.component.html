@@ -41,8 +41,4 @@
       {{ saving ? 'Đang gửi...' : 'POST /stocks' }}
     </button>
   </form>
-
-  @if (message) {
-    <p class="result" [class.ok]="success" [class.bad]="!success">{{ message }}</p>
-  }
 </main>
