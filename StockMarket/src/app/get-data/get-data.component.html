@@ -1,6 +1,7 @@
 <main class="get-data">
   <h1>Get Data from API</h1>
   <p class="hint">GET http://localhost:3000/stocks</p>
+  <p class="hint">Cập nhật lúc: {{ now | date:'dd/MM/yyyy HH:mm' }}</p>
 
   @if (loading) {
     <p>Đang tải...</p>
@@ -20,9 +21,9 @@
     <tbody>
       @for (stock of stocks$ | async; track stock.code) {
         <tr>
-          <td>{{ stock.code }}</td>
+          <td>{{ stock.code | uppercase }}</td>
           <td>{{ stock.name }}</td>
-          <td>{{ stock.price }}</td>
+          <td>{{ stock.price | currency:'USD' }}</td>
           <td
             [class.up]="stock.price >= stock.previousPrice"
             [class.down]="stock.price < stock.previousPrice"

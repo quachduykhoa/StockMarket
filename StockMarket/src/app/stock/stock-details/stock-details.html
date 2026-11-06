@@ -1,7 +1,7 @@
 @if (stock) {
 	<section class="stock-details">
 		<h2 class="name">
-			{{ stock.name }} <span class="code">({{ stock.code }})</span>
+			{{ stock.name }} <span class="code">({{ stock.code | uppercase }})</span>
 		</h2>
 
 		<p class="exchange">{{ stock.exchange || 'OTHER' }}</p>
@@ -10,7 +10,7 @@
 			class="price"
 			[class.positive]="stock.price >= stock.previousPrice"
 			[class.negative]="stock.price < stock.previousPrice">
-			$ {{ stock.price }}
+			{{ stock.price | currency:'USD' }}
 			<span class="previous">(previous: $ {{ stock.previousPrice }})</span>
 		</p>
 	</section>

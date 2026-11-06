@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { CurrencyPipe, UpperCasePipe } from '@angular/common';
 import { Stock } from '../../model/stock';
 import { StockService } from '../../services/stock.service';
 import { MessageService } from '../../services/message.service';
 
 @Component({
   selector: 'app-stock-item',
-  imports: [RouterLink],
+  imports: [RouterLink, CurrencyPipe, UpperCasePipe],
   templateUrl: './stock-item.html',
   styleUrl: './stock-item.css',
 })

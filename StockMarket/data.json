@@ -17,6 +17,24 @@
       "previousPrice": 860,
       "exchange": "NYSE",
       "favorite": false
+    },
+    {
+      "id": "aNTpLs_74Qk",
+      "name": "Bàn Làm Việc Chữ L MDF",
+      "code": "KD",
+      "price": 90,
+      "previousPrice": 78,
+      "exchange": "NYSE",
+      "favorite": false
+    },
+    {
+      "name": "Khoa Duy",
+      "code": "weqw",
+      "price": 7,
+      "previousPrice": 7,
+      "exchange": "HOSE",
+      "favorite": false,
+      "id": "Klu7NKwlB_w"
     }
   ],
   "users": [

@@ -1,17 +1,65 @@
-<div class="links">
-	<span><a routerLink="/login" routerLinkActive="active">Login</a></span>
-	<span><a routerLink="/register" routerLinkActive="active">Register</a></span>
-	<span><a routerLink="/stock-item" routerLinkActive="active">Stock List</a></span>
-	<span><a routerLink="/create-stock-form" routerLinkActive="active">Create Stock Form</a></span>
-	<span><a routerLink="/get-data" routerLinkActive="active">Get Data</a></span>
-	<span><a routerLink="/post-data" routerLinkActive="active">Post Data</a></span>
-</div>
+<!-- ===== MENU NGANG ===== -->
+<mat-toolbar class="nav-height app-toolbar">
+  <mat-toolbar-row>
+    <button mat-icon-button (click)="openLeftSide()" aria-label="Mở menu">
+      <mat-icon>menu</mat-icon>
+    </button>
 
-@if (message$ | async; as message) {
-	<p class="app-message" [class.error]="message.type === 'error'">
-		{{ message.text }}
-		<button type="button" class="dismiss" (click)="clearMessage()">×</button>
-	</p>
-}
+    <h1>Stock Market</h1>
+    <span class="menu-spacer"></span>
 
-<router-outlet></router-outlet>
+    <a mat-button routerLink="/stock-item" routerLinkActive="active-link">
+      <mat-icon>home</mat-icon> Home
+    </a>
+    <a mat-button routerLink="/login" routerLinkActive="active-link">
+      <mat-icon>person</mat-icon> Login
+    </a>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<!-- ===== MENU DỌC ===== -->
+<mat-sidenav-container class="app-container">
+  <mat-sidenav #sidenav mode="over" (closed)="closeLeftSide()" class="app-sidenav">
+    <mat-nav-list>
+      <a mat-list-item routerLink="/stock-item" routerLinkActive="active-link"
+         (click)="sidenav.close()">
+        <mat-icon matListItemIcon>home</mat-icon> Home
+      </a>
+      <a mat-list-item routerLink="/create-stock-form" routerLinkActive="active-link"
+         (click)="sidenav.close()">
+        <mat-icon matListItemIcon>add_box</mat-icon> Create Stock
+      </a>
+      <!--<a mat-list-item routerLink="/post-data" routerLinkActive="active-link"
+         (click)="sidenav.close()">
+        <mat-icon matListItemIcon>upload</mat-icon> Post data
+      </a>
+      <a mat-list-item routerLink="/get-data" routerLinkActive="active-link"
+         (click)="sidenav.close()">
+        <mat-icon matListItemIcon>download</mat-icon> Get data
+      </a>-->
+      <a mat-list-item routerLink="/register" routerLinkActive="active-link"
+         (click)="sidenav.close()">
+        <mat-icon matListItemIcon>person_add</mat-icon> Register
+      </a>
+      <a mat-list-item (click)="sidenav.close()">
+        <mat-icon matListItemIcon>close</mat-icon> Close
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="page-content"
+         [class.content-move-left]="!isOpened"
+         [class.content-move-right]="isOpened">
+
+      @if (message$ | async; as message) {
+        <p class="app-message" [class.error]="message.type === 'error'">
+          {{ message.text }}
+          <button type="button" class="dismiss" (click)="clearMessage()">×</button>
+        </p>
+      }
+
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

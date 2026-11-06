@@ -1,32 +1,68 @@
 :host {
   display: block;
-  padding: 20px 24px;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f5f5f5;
+  font-family: Roboto, Arial, Helvetica, sans-serif;
 }
 
-h1 {
-  margin: 0 0 18px;
-  font-size: 2.3rem;
-  font-weight: 700;
-  color: #111;
+/* ---- menu ngang ---- */
+.nav-height {
+  min-height: 50px !important;
+  height: 50px !important;
 }
 
-app-stock-list {
-  display: block;
+/* M3: color="primary" không còn tác dụng → tự set màu bằng system variable */
+.app-toolbar {
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
 }
 
-/* trang 25: style cho nav và link đang active */
-.links,
-.links a {
+.app-toolbar h1 {
+  margin: 0 0 0 8px;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.menu-spacer {
+  flex: 1 1 auto;
+}
+
+/* ---- menu dọc ---- */
+.app-container {
+  height: calc(100vh - 50px);
+}
+
+.app-sidenav {
+  width: 170px;
+}
+
+.page-content {
   padding: 10px;
+  min-height: 100%;
+  box-sizing: border-box;
 }
 
-.links a.active {
-  background-color: grey;
+.content-move-right {
+  margin-left: 170px !important;
+  transition: ease 0.2s;
 }
 
-/* banner thông báo tập trung (MessageService) */
+.content-move-left {
+  margin-left: 10px !important;
+  transition: ease 0.1s;
+}
+
+/* link đang active (cả toolbar và sidenav) */
+.active-link {
+  background: blue;
+  color: white;
+}
+
+/*  .mat-button:hover — Material 15+ dùng MDC nên phải là a[mat-button] */
+a[mat-button]:hover {
+  background: blue;
+  color: white;
+}
+
+/* ---- banner MessageService (giữ nguyên) ---- */
 .app-message {
   display: flex;
   align-items: center;

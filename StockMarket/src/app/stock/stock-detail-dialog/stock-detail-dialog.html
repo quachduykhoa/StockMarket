@@ -3,7 +3,7 @@
 		<div class="detail-header">
 			<h3>
 				{{ stock.name }}
-				<span class="code">{{ stock.code }}</span>
+				<span class="code">{{ stock.code | uppercase }}</span>
 			</h3>
 			<button type="button" class="close-btn" (click)="close()" title="Close">×</button>
 		</div>
@@ -11,7 +11,7 @@
 		<dl class="detail-body">
 			<div class="row">
 				<dt>Code</dt>
-				<dd>{{ stock.code }}</dd>
+				<dd>{{ stock.code | uppercase }}</dd>
 			</div>
 			<div class="row">
 				<dt>Exchange</dt>
@@ -19,11 +19,11 @@
 			</div>
 			<div class="row">
 				<dt>Price</dt>
-				<dd>${{ stock.price }}</dd>
+				<dd>{{ stock.price | currency:'USD' }}</dd>
 			</div>
 			<div class="row">
 				<dt>Previous Price</dt>
-				<dd>${{ stock.previousPrice }}</dd>
+				<dd>{{ stock.previousPrice | currency:'USD' }}</dd>
 			</div>
 			<div class="row">
 				<dt>Change</dt>

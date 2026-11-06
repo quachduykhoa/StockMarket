@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { CurrencyPipe, UpperCasePipe } from '@angular/common';
 import { Stock } from '../../model/stock';
 import { StockService } from '../../services/stock.service';
 import { MessageService } from '../../services/message.service';
 
 @Component({
   selector: 'app-stock-details',
-  imports: [RouterLink],
+  imports: [RouterLink, CurrencyPipe, UpperCasePipe],
   templateUrl: './stock-details.html',
   styleUrl: './stock-details.css',
 })

@@ -8,10 +8,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Stock } from '../../model/stock';
+import { CurrencyPipe, UpperCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-stock-detail-dialog',
-  imports: [],
+  imports: [CurrencyPipe, UpperCasePipe],
   templateUrl: './stock-detail-dialog.html',
   styleUrl: './stock-detail-dialog.css',
 })
