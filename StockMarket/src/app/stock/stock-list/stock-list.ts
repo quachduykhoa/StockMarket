@@ -57,12 +57,27 @@ export class StockList implements OnInit {
     this.stockToUpdate = stock;
   }
 
+  
   deleteStock(stock: Stock) {
-    this.stockService.deleteStock(stock.id!).subscribe({
+    if (stock.id === undefined) {
+      this.messageService.error('Không thể xóa Stock vì thiếu ID.');
+      return;
+    }
+
+    this.stockService.deleteStock(stock.id).subscribe({
       next: () => {
-        this.stocks = this.stocks.filter((each) => each.id !== stock.id);
+        this.stocks = this.stocks.filter(
+          (each) => each.id !== stock.id
+        );
+
+        this.messageService.success(
+          `Đã xóa cổ phiếu ${stock.code} thành công.`
+        );
       },
-      error: (err: Error) => this.messageService.error(err.message),
+      error: (err: Error) => {
+        this.messageService.error(err.message);
+      },
     });
   }
+  
 }

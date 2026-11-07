@@ -71,14 +71,28 @@ export class StockUpdateDialog implements AfterViewInit, OnChanges {
     return !!control && control.touched && control.invalid;
   }
 
+  
   save() {
     if (this.stockForm.invalid || !this.stock) {
       this.stockForm.markAllAsTouched();
-      this.messageService.error('Please fill in all required fields (price must be >= 0).');
+      this.messageService.error(
+        'Please fill in all required fields (price must be >= 0).'
+      );
       return;
     }
 
+    // Kiểm tra ID của Stock
+    if (this.stock.id === undefined) {
+      this.messageService.error(
+        'Không thể cập nhật Stock vì thiếu ID.'
+      );
+      return;
+    }
+
+    // Lấy dữ liệu từ Form
     const value = this.stockForm.getRawValue();
+
+    // Tạo đối tượng Stock mới
     const updated: Stock = {
       id: this.stock.id,
       name: value.name ?? this.stock.name,
@@ -89,10 +103,15 @@ export class StockUpdateDialog implements AfterViewInit, OnChanges {
       favorite: this.stock.favorite,
     };
 
-    this.stockService.updateStock(this.stock.id!, updated).subscribe({
+    // Gọi API cập nhật Backend
+    this.stockService.updateStock(this.stock.id, updated).subscribe({
       next: (saved) => {
         Object.assign(this.stock!, saved);
-        this.messageService.success(`Đã cập nhật mã ${saved.code}`);
+
+        this.messageService.success(
+          `Đã cập nhật mã ${saved.code}`
+        );
+
         this.close();
       },
       error: (err: Error) => {
@@ -100,6 +119,7 @@ export class StockUpdateDialog implements AfterViewInit, OnChanges {
       },
     });
   }
+
 
   close() {
     this.dialog?.nativeElement.close();

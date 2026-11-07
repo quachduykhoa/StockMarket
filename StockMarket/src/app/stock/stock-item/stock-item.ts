@@ -18,14 +18,50 @@ export class StockItem {
 
   @Output() remove = new EventEmitter<void>();
 
+  isUpdatingFavorite = false;
+
   constructor(private stockService: StockService, private messageService: MessageService) {}
 
+  
   toggleFavorite() {
+    if (this.isUpdatingFavorite) {
+      return;
+    }
+
+    if (this.stock.id === undefined) {
+      this.messageService.error(
+        'Không thể cập nhật Favorite vì thiếu Stock ID.'
+      );
+      return;
+    }
+
+    this.isUpdatingFavorite = true;
+
     this.stockService.toggleFavorite(this.stock).subscribe({
-      next: (updated) => (this.stock.favorite = updated.favorite),
-      error: (err: Error) => this.messageService.error(err.message),
+
+      next: (updated) => {
+
+        this.stock.favorite = updated.favorite;
+
+        this.messageService.success(
+          updated.favorite
+            ? `${this.stock.code} đã được thêm vào Favorite.`
+            : `${this.stock.code} đã được xóa khỏi Favorite.`
+        );
+
+        this.isUpdatingFavorite = false;
+      },
+
+      error: (err: Error) => {
+
+        this.messageService.error(err.message);
+
+        this.isUpdatingFavorite = false;
+      },
+
     });
   }
+
 
   showDetail() {
     this.detail.emit();
